@@ -41,7 +41,7 @@ async function main() {
       //console.log(cart);
 
       const decision :string = await r1.question("Do you want to add more items [y/n] : ");
-      if(decision == "n"){
+      if(decision.trim().toLowerCase() === "n"){
         isflag = false;
       }
     }
@@ -57,9 +57,59 @@ async function main() {
 
 
 
+
+    const discountedTotal : number = await ApplyMembershipDiscount(globalTotal , r1);
+    console.log("Discounted Total : " + discountedTotal);
     r1.close();
 
 
+
+
+}
+async function ApplyMembershipDiscount(globalTotal : number , r1 : readline.Interface){
+  // no need to create too many input objects , stick w r1 alone 
+  // const r2 = readline.createInterface({
+  //   input : process.stdin,
+  //   output : process.stdout
+  // });
+  let discountRate : number ;
+
+
+  const isMember : string = await r1.question("Are you a member [y/n] : ");
+  if(isMember.trim().toLowerCase() === "y"){
+    // now that we know he's a member what's the membership type ? 
+    const membershipType : string = await r1.question("membership type?  (Silver / Gold / Platinum) : ");
+    switch(membershipType.trim().toLowerCase()){
+      case "silver":
+        discountRate = 0.05;
+        break;
+      case "gold":
+        discountRate = 0.10;
+        break;
+      case "platinum":
+        discountRate = 0.15;
+        break;
+      default:
+        discountRate = 0.0;
+
+    }
+
+  }
+  else{
+    // means he is not a member 
+    discountRate  = 0.0 ; 
+  }
+  if(discountRate > 0){
+    console.log("Membership Discount applied !!! ");
+  }
+  else{
+
+    console.log("No Discount Applied");
+  }
+  const discountAmount : number = globalTotal * discountRate;
+  console.log("discounted amout : " + discountAmount );
+  const discountedTotal : number = globalTotal - discountAmount;
+  return discountedTotal;
 
 }
 main();
