@@ -62,7 +62,7 @@ async function main() {
     console.log("Discounted Total : " + discountedTotal);
 
     // lets apply gst and platform fee now 
-    const GrandTotal : number = await ApplyGst(r1 , discountedTotal);
+    const GrandTotal : number = await ApplyGst(discountedTotal);
     // total after applying gst and platform fee 
     console.log("Grand Total : " + GrandTotal.toFixed(2));
     r1.close();
@@ -128,7 +128,7 @@ async function ApplyMembershipDiscount(globalTotal : number , r1 : readline.Inte
 // 3. Compute platform fee: discountedTotal * platformFeeRate.
 // 4. Add both to the discounted total.
 // 5. Display updated total with tax and fees.
-async function ApplyGst(r1 : readline.Interface , discountedTotal : number){
+async function ApplyGst( discountedTotal : number){
   const gstRate : number = 0.18 ; 
   const platformFeeRate : number = 0.02 ; 
 
