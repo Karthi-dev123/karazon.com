@@ -60,6 +60,11 @@ async function main() {
 
     const discountedTotal : number = await ApplyMembershipDiscount(globalTotal , r1);
     console.log("Discounted Total : " + discountedTotal);
+
+    // lets apply gst and platform fee now 
+    const GrandTotal : number = await ApplyGst(r1 , discountedTotal);
+    // total after applying gst and platform fee 
+    console.log("Grand Total : " + GrandTotal.toFixed(2));
     r1.close();
 
 
@@ -110,6 +115,34 @@ async function ApplyMembershipDiscount(globalTotal : number , r1 : readline.Inte
   console.log("discounted amout : " + discountAmount );
   const discountedTotal : number = globalTotal - discountAmount;
   return discountedTotal;
+
+}
+// • gstRate (Number, e.g., 0.18)
+// • platformFeeRate (Number, e.g., 0.002)
+// • gstAmount (Number)
+// • platformFee (Number)
+// • totalWithTax (Number)
+// Steps:
+// 1. Use the discounted total from Lab 2.
+// 2. Compute GST: discountedTotal * gstRate.
+// 3. Compute platform fee: discountedTotal * platformFeeRate.
+// 4. Add both to the discounted total.
+// 5. Display updated total with tax and fees.
+async function ApplyGst(r1 : readline.Interface , discountedTotal : number){
+  const gstRate : number = 0.18 ; 
+  const platformFeeRate : number = 0.02 ; 
+
+  const gstAmount : number = discountedTotal * gstRate;
+  const platformFee : number = discountedTotal * platformFeeRate;
+
+  // add both to ur discounted total and then return 
+
+  console.log("GST & PLATFORM FEE APPLIED !!! ");
+  console.log("GST Amount : " + gstAmount.toFixed(2));
+  console.log("Platform Fee : " + platformFee.toFixed(2));
+
+  const GrandTotal : number = discountedTotal + gstAmount + platformFee;
+  return GrandTotal;
 
 }
 main();
